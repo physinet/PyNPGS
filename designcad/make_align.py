@@ -27,7 +27,7 @@ def make_align(dc2file, layers, locations, window_size=40):
             if layer_number in layers:
                 ## Change alignment marks to solid
                 split = lines[i].split()
-                split[4] = str(1) #
+                split[4] = str(0) #
                 lines[i] = ' '.join(split) + '\n'
 
         ## Find layer headings
@@ -51,7 +51,7 @@ def make_window(layer_number, location, window_size=40):
     w = window_size/2
 
     s = []
-    s.append('1 5 0.2000 0 0 %s 0 1 0 255 255 255 0 1\n' %layer_number) # I don't know what most of these mean. 5 is number of points in the line. %s is the layer number. The 1 directly before the layer number indicates a dashed line. 255 255 255 is RGB (white)
+    s.append('1 5 0.2000 0 1 %s 0 1 0 255 255 255 0 1\n' %layer_number) # I don't know what most of these mean. 5 is number of points in the line. %s is the layer number. The 1 directly before the layer number indicates a dashed line. 255 255 255 is RGB (white)
     s.append('%i %i 0\n' %(location[0] - w, location[1] + w)) # These are the four corners of the square
     s.append('%i %i 0\n' %(location[0] + w, location[1] + w))
     s.append('%i %i 0\n' %(location[0] + w, location[1] - w))
