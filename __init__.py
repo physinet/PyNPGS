@@ -1,1 +1,1 @@
-from designcad import *
+from .designcad import *
