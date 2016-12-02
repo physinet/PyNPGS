@@ -22,9 +22,9 @@ def make_align(dc2file, layers, locations, window_size=40):
 
     if lines[13] != 'SIMPLEX2.VFN\n':
         raise Exception('Need to open in DesignCAD first and save! Then we can edit it!')
-
+     
+    ## Find shape headings and change to solid
     for i, line in enumerate(lines):
-        ## Find shape headings
         for match in re.finditer(pattern_shape, line):
             layer_number = int(lines[i].split()[5]) # 6th number is layer
             if layer_number in layers:
@@ -33,7 +33,8 @@ def make_align(dc2file, layers, locations, window_size=40):
                 split[4] = str(0) #
                 lines[i] = ' '.join(split) + '\n'
 
-        ## Find layer headings
+    ## Find layer headings and insert alignment windows
+    for i, line in enumerate(lines):
         for match in re.finditer(pattern_layer, line): # searches for six ints with spaces
             layer_number = int(lines[i].split()[1]) # the layer number is the second number
             if layer_number in layers:
