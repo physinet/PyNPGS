@@ -20,6 +20,9 @@ def make_align(dc2file, layers, locations, window_size=40):
     with open(dc2file) as f:
         lines = f.readlines()
 
+    if lines[13] != 'SIMPLEX2.VFN\n':
+        raise Exception('Need to open in DesignCAD first and save! Then we can edit it!')
+
     for i, line in enumerate(lines):
         ## Find shape headings
         for match in re.finditer(pattern_shape, line):
@@ -40,7 +43,7 @@ def make_align(dc2file, layers, locations, window_size=40):
                 lines[i+1:i+1] = window # inserts the array of lines
 
     ## Write changes
-    with open(dc2file, 'w') as f:
+    with open(dc2file.split('.')[0]+'_align.dc2', 'w') as f:
         f.write(''.join(lines))
 
 def make_window(layer_number, location, window_size=40):
