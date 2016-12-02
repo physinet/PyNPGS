@@ -44,9 +44,10 @@ def make_align(dc2file, layers, locations, window_size=40):
                 lines[i+1:i+1] = window # inserts the array of lines
 
     ## Write changes
-    with open(dc2file.split('.')[0]+'_align.dc2', 'w') as f:
-        f.write(''.join(lines))
+    with open(dc2file.split('.')[0]+'_align.dc2', 'w', newline='\r\n') as f:
+        f.writelines(lines)
 
+        
 def make_window(layer_number, location, window_size=40):
     '''
     Makes a dashed window in the given layer, at the given location, with the given size.
