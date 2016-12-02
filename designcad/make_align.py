@@ -1,6 +1,21 @@
 import re, shutil
 
-def make_align(dc2file, layers, locations, window_size=40):
+
+def align_mark_locations(origin, spacing):
+    '''
+    Returns an argument for make_align containing coordinates of four alignment
+    marks from upper left going clockwise.
+    '''
+
+    return [
+        (origin - spacing/2, origin + spacing/2),
+        (origin + spacing/2, origin + spacing/2),
+        (origin + spacing/2, origin - spacing/2),
+        (origin - spacing/2, origin - spacing/2)
+    ]
+
+
+def make_align(dc2file, layers, locations, window_size=50):
     '''
     Sets up alignment marks for NPGS. Give it the DC2 file you'd like to modify,
     specify the layers of alignment marks (in order) and the locations of the
@@ -22,7 +37,7 @@ def make_align(dc2file, layers, locations, window_size=40):
 
     if lines[13] != 'SIMPLEX2.VFN\n':
         raise Exception('Need to open in DesignCAD first and save! Then we can edit it!')
-     
+
     ## Find shape headings and change to solid
     for i, line in enumerate(lines):
         for match in re.finditer(pattern_shape, line):
@@ -47,7 +62,7 @@ def make_align(dc2file, layers, locations, window_size=40):
     with open(dc2file.split('.')[0]+'_align.dc2', 'w', newline='\r\n') as f:
         f.writelines(lines)
 
-        
+
 def make_window(layer_number, location, window_size=40):
     '''
     Makes a dashed window in the given layer, at the given location, with the given size.

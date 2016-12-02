@@ -1,15 +1,15 @@
 MAG_SCALE = 300000 # = (actual field of view (um)) * (magnification); from Pg.sys
 
-def setup_run_file(runfile, align_layers, expose_layers, mag, config_param, current, dose):
+def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, config_param=None, current=None):
     '''
     This function assumes that a runfile has been generated with two entities.
     The first entity must be "alignment" and the second must be "pattern".
     "align_layers" is a list of layer numbers where alignment marks can be found.
     "expose_layers" is a list of layer numbers you want to expose
-    "mag" is magnification. Set this somewhat lower than MaxMag (allows for rotation correction)
-    "config_param" is the configuration parameter. At CNF, this controls the SEM aperture size (important!)
-    "current" is the measured beam current (pA)
-    "dose" is the exposure area dose (µC/cm^2)
+    "mag" is magnification. Set this somewhat lower than MaxMag (allows for rotation correction) 900 is good for 200x200 um alignment marks
+    "dose" is the exposure area dose (µC/cm^2) 320 is default for PMMA bilayer
+    "config_param" is the configuration parameter. At CNF, this controls the SEM aperture size (important!). Can be set at the tool
+    "current" is the measured beam current (pA) - this can always be set directly at the Nabity and the dwell time will update correctly
 
     Some customization for CNF's Nabity:
     MAG_SCALE (global variable) defined as 300000
@@ -20,7 +20,7 @@ def setup_run_file(runfile, align_layers, expose_layers, mag, config_param, curr
     layer_number = None
     alignment_layer = True
     assert type(mag) is int
-    assert type(config_param) is int
+    assert type(config_param) in (int, type(None))
 
     ## Get contents of runfile
     with open(runfile) as f:
@@ -50,11 +50,17 @@ def setup_run_file(runfile, align_layers, expose_layers, mag, config_param, curr
 
             ## Set minimum line spacing (needs to be set in Angstrom)
             line_spacing = MAG_SCALE * 10000 / mag / 2**16 * 4 # 10000 converts um to Angstrom, divide by mag to get field of view, then divide by 16 bits on the DAC, then multiply by 4 based on Nabity's suggestion
+            if alignment_layer:
+                line_spacing *= 10 # Alignment doesn't need super super fine spacing, and NPGS will complain if there are too many exposure points in the grid. If this is for some reason still too small, can always edit the runfile manually.
             split[6] = str(line_spacing)
             split[7] = split[6] # this is what Nabity calls "line spacing" - make it the same as center-to-center fo square exposure grid
 
-            split[8] = str(config_param) # configuration parameter
-            split[9] = str(current)
+            if config_param is not None:
+                split[8] = str(config_param) # configuration parameter
+            if current is not None:
+                split[9] = str(current)
+            else:
+                current = float(split[9]) # for doing the dwell time calculation below
 
         elif split[0] == 'col': # indicates a color
             # split[1] # just the corresponding number
