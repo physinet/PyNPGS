@@ -1,17 +1,17 @@
 import re, shutil
 
 
-def align_mark_locations(origin, spacing):
+def align_mark_locations(origin = (0,0), spacing=50):
     '''
     Returns an argument for make_align containing coordinates of four alignment
     marks from upper left going clockwise.
     '''
 
     return [
-        (origin - spacing/2, origin + spacing/2),
-        (origin + spacing/2, origin + spacing/2),
-        (origin + spacing/2, origin - spacing/2),
-        (origin - spacing/2, origin - spacing/2)
+        (origin[0] - spacing/2, origin[1] + spacing/2),
+        (origin[0] + spacing/2, origin[1] + spacing/2),
+        (origin[0] + spacing/2, origin[1] - spacing/2),
+        (origin[0] - spacing/2, origin[1] - spacing/2)
     ]
 
 
@@ -40,15 +40,17 @@ def make_align(dc2file, layers, locations, window_size=50):
 
     ## Find shape headings and change to solid
     for i, line in enumerate(lines):
+        for match in re.finditer(pattern_layer, line): # find the layer heading
+            layer_number = int(lines[i].split()[1]) # the layer number is the second number in the layer heading
+            # we then continue through the next few lines which correspond to the layer we just identified
         for match in re.finditer(pattern_shape, line):
-            layer_number = int(lines[i].split()[5]) # 6th number is layer
             if layer_number in layers:
                 ## Change alignment marks to solid
                 split = lines[i].split()
                 split[4] = str(0) #
                 lines[i] = ' '.join(split) + '\n'
 
-    ## Find layer headings and insert alignment windows
+    ## Find layer headings and insert alignment windows. This inserts lines so is done as another loop.
     for i, line in enumerate(lines):
         for match in re.finditer(pattern_layer, line): # searches for six ints with spaces
             layer_number = int(lines[i].split()[1]) # the layer number is the second number
