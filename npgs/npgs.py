@@ -1,5 +1,6 @@
 MAG_SCALE = 300000 # = (actual field of view (um)) * (magnification); from Pg.sys
-
+ 
+    
 def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, config_param=None, current=None):
     '''
     This function assumes that a runfile has been generated with two entities.
@@ -22,6 +23,9 @@ def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, conf
     assert type(mag) is int
     assert type(config_param) in (int, type(None))
 
+    ## Backup copy of runfile
+    shutil.copyfile(runfile, runfile.split('.')[0]+'_backup.RF6') # copy in place
+    
     ## Get contents of runfile
     with open(runfile) as f:
         lines = f.readlines()
@@ -84,5 +88,5 @@ def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, conf
         lines[i] = ' '.join(split) + '\n' # recreate the line with spaces
 
     ## Write changes
-    with open(runfile.split('.')[0]+'_edited.RF6', 'w', newline='\r\n') as f:
+    with open(runfile, 'w', newline='\r\n') as f:
         f.writelines(lines)
