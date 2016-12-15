@@ -2,7 +2,7 @@ How to use PyNPGS to assist design file preparation for the Nabity e-beam system
 
 Setting up the design file
 1) Create a GDS file in the design software of your choice.
-1a) Make sure alignment marks are each in a separate layer (I'd suggest 11-14 for the four corners)
+1a) Make sure alignment marks are each in a separate layer (I use 11-14 for the four corners)
 2) Drag this into C:\NPGS\Projects
 3) Open NPGS Menu, convert to DC2 with DesignCAD Drawing Unit Size = 1.0 (leave all other parameters at their default values; you can change the filename if you wish)
 4) Open the created .dc2 file in DesignCAD through NPGS Menu

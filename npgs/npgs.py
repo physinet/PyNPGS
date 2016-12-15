@@ -1,6 +1,6 @@
 MAG_SCALE = 300000 # = (actual field of view (um)) * (magnification); from Pg.sys
- 
-    
+import shutil
+
 def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, config_param=None, current=None):
     '''
     This function assumes that a runfile has been generated with two entities.
@@ -25,7 +25,7 @@ def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, conf
 
     ## Backup copy of runfile
     shutil.copyfile(runfile, runfile.split('.')[0]+'_backup.RF6') # copy in place
-    
+
     ## Get contents of runfile
     with open(runfile) as f:
         lines = f.readlines()
