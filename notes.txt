@@ -1,0 +1,87 @@
+Layers 20-255 are for comments. So just use layers 2-19. Hopefully won't need that many.
+Okay to put some background pattern in layer 0, just note that it will be put in layer 1 in designcad
+Convenient to have alignment marks four sequential layers, maybe just do 11-14?
+
+In DesignCAD, it's hard to select the right polygon if there are two identical overlapping polygons, so make sure you just move layers rather than copying them in LayoutEditor
+
+Have a master, untampered design file with shapes in the "wrong" layers, then make additional GDS files for each exposure.
+
+Much easier to insert and scale/rotate images in LayoutEditor
+
+Editing files directly:
+Each layer in DC2 is preceded by a line like this:
+21 11 0 0 0 0
+Where in this case 11 is the layer number. Under this heading, each shape in DC2 is preceded by a line like this:
+1 13 0.2000 0 0 14 0 1 0 0 255 255 0 1
+We really care about the two bolded numbers (in this case 0 14)
+The first number is the linestyle (should be 0 for solid, 1 for dashed) - might be backwards actually
+The second number is the layer number.
+
+This is what a square looks like (e.g.)
+1 5 0.2000 0 1 9 0 1 0 192 192 192 0 1
+-831 1742 0
+-829 1742 0
+-829 1740 0
+-831 1740 0
+-831 1742 0
+It looks like the 5 indicates the number of points in the line. 192 192 192 are RGB color
+
+Run files
+Whitespace appears not to matter. NPGS will fix it when resaving. Need to make sure new lines are proper for Windows though.
+center-to-center and line spacing minimum resolution determined by a value in Pg.sys. For CNF's Nabity: 300000 = (actual field of view, um) * (magnification)
+Minimum line spacing resolution (nm) = 300,000,000 / magnification / 65536
+For example, for 1000 magnification: 300,000,000 / 1000 / 65536 = 4.58 nm
+Nabity recommends 4*(this number) for the finest lines
+Center-to-center and line spacing should be equal if you want a square grid of exposure points
+
+nx01,0100yyyy0200,1xy
+2
+20161129_TLetch_align AL  <- alignment entity
+1
+0,0
+20161129_TLetch_align     <- pattern entity
+1
+0,0
+# lev indicates layer
+# 9 is layer number
+# w is "window", s is "skip", c is "continuous"
+# 0,0 is origin?
+# 1243 is ??
+# 1000 is magnification
+# 183.105 is center-to-center distance and line spacing (angstroms)
+# 1 is configuration parameter
+# 10.0 is measured beam current (pA)
+# col -001 is color number 1
+# 192 192 192 is RGB
+# 238 is counts
+# 1.30 1 is line dose (258.175 0) is area dose
+lev 9 s    0,0    1243    1000    183.105    183.105    1    10.0
+col -001 192 192 192 238 1.30 1
+lev 11 w    0,0    1243    900    203.451    203.451    1    12.3
+col -001 255 255 255 999 1.30 1
+col -002 000 255 000 999 1.30 1
+lev 12 w    0,0    1243    900    203.451    203.451    1    12.3
+col -001 255 255 255 999 1.30 1
+col -002 000 000 255 999 1.30 1
+lev 13 w    0,0    1243    900    203.451    203.451    1    12.3
+col -001 255 255 255 999 1.30 1
+col -002 255 255 000 999 1.30 1
+lev 14 w    0,0    1243    900    203.451    203.451    1    12.3
+col -001 255 255 255 999 1.30 1
+col -002 000 255 255 999 1.30 1
+*
+lev 9 c    0,0    2487    1000    183.105    503.54    1    10.0
+col -001 192 192 192 238.04 258.175 0
+lev 11 s    0,0    1243    1000    183.105    503.54    1    10.0
+col -001 255 255 255 238.04 1.30 1
+col -002 000 255 000 238.04 1.30 1
+lev 12 s    0,0    1243    1000    183.105    503.54    1    10.0
+col -001 255 255 255 238.04 1.30 1
+col -002 000 000 255 238.04 1.30 1
+lev 13 s    0,0    1243    1000    183.105    503.54    1    10.0
+col -001 255 255 255 238.04 1.30 1
+col -002 255 255 000 238.04 1.30 1
+lev 14 s    0,0    1243    1000    183.105    503.54    1    10.0
+col -001 255 255 255 238.037 1.30 1
+col -002 000 255 255 238.037 1.30 1
+*
