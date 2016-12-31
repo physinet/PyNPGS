@@ -74,9 +74,9 @@ def make_window(layer_number, location, window_size=40):
 
     s = []
     s.append('1 5 0.2000 0 1 %s 0 1 0 255 255 255 0 1\n' %layer_number) # I don't know what most of these mean. 5 is number of points in the line. %s is the layer number. The 1 directly before the layer number indicates a dashed line. 255 255 255 is RGB (white)
-    s.append('%i %i 0\n' %(location[0] - w, location[1] + w)) # These are the four corners of the square
-    s.append('%i %i 0\n' %(location[0] + w, location[1] + w))
-    s.append('%i %i 0\n' %(location[0] + w, location[1] - w))
-    s.append('%i %i 0\n' %(location[0] - w, location[1] - w))
-    s.append('%i %i 0\n' %(location[0] - w, location[1] + w)) # line has to reconnect with itself
+    s.append('%.4f %.4f 0\n' %(location[0] - w, location[1] + w)) # These are the four corners of the square
+    s.append('%.4f %.4f 0\n' %(location[0] + w, location[1] + w))
+    s.append('%.4f %.4f 0\n' %(location[0] + w, location[1] - w))
+    s.append('%.4f %.4f 0\n' %(location[0] - w, location[1] - w))
+    s.append('%.4f %.4f 0\n' %(location[0] - w, location[1] + w)) # line has to reconnect with itself
     return s
