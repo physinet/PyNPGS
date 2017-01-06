@@ -21,10 +21,17 @@ def make_align(dc2file, layers, locations, window_size=50):
     specify the layers of alignment marks (in order) and the locations of the
     centers of the alignment marks (in the same order).
 
+    Make sure you use layers 1-15 only.
+
     This will convert the dashed lines of the alignment marks to solid and draw
     dashed square windows that are window_size x window_size, centered at the
     alignment mark locations
     '''
+    # Make sure you use layers <= 15.
+    for layer in layers:
+        if layer > 15:
+            raise Exception('Avoid using layer numbers > 15. I\'m not sure how DC2 files deal with layer numbers above 15.')
+
     pattern_layer = re.compile("^\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*$") # this is six integers separated by spaces
     pattern_shape = re.compile("^\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}.[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*[0-9]{1,10}\s*$")
 

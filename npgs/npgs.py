@@ -5,8 +5,8 @@ def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, conf
     '''
     This function assumes that a runfile has been generated with two entities.
     The first entity must be "alignment" and the second must be "pattern".
-    "align_layers" is a list of layer numbers where alignment marks can be found.
-    "expose_layers" is a list of layer numbers you want to expose
+    "align_layers" is a list of layer numbers where alignment marks can be found. Make sure you use layers 1-15 only.
+    "expose_layers" is a list of layer numbers you want to expose. Make sure you use layers 1-15 only.
     "mag" is magnification. Set this somewhat lower than MaxMag (allows for rotation correction) 900 is good for 200x200 um alignment marks
     "dose" is the exposure area dose (µC/cm^2) 320 is default for PMMA bilayer
     "config_param" is the configuration parameter. At CNF, this controls the SEM aperture size (important!). Can be set at the tool
@@ -17,6 +17,11 @@ def setup_run_file(runfile, align_layers, expose_layers, mag=900, dose=320, conf
     Square exposure grid
     Line spacing set to minimum recommended by Nabity for the finest features
     '''
+    ## Check layer numbers
+    for layer in align_layers + expose_layers:
+        if layer > 15:
+            raise Exception('Avoid using layer numbers > 15. I\'m not sure how DC2 files deal with layer numbers above 15.')
+
     ## Initialize some stuff
     layer_number = None
     alignment_layer = True
